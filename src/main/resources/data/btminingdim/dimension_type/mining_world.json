@@ -9,6 +9,7 @@
   "min_y": -64,
   "height": 384,
   "natural": true,
+  "peaceful" : true,
   "coordinate_scale": 1.0,
   "piglin_safe": true,
   "bed_works": true,
@@ -20,7 +21,7 @@
     "type": "minecraft:uniform",
     "value": {
       "min_inclusive": 0,
-      "max_inclusive": 7
+      "max_inclusive": 0
     }
   },
   "monster_spawn_block_light_limit": 0

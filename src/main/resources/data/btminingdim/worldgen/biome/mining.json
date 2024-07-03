@@ -1,20 +1,12 @@
 {
-  "surface_builder": "minecraft:stone",
-  "depth": 0,
-  "scale": 0,
-  "temperature": 2,
-  "downfall": 0,
-  "precipitation": "none",
-  "category": "plains",
-  "has_precipitation": false,
-  "player_spawn_friendly": false,
+  "temperature": 0.2,
+  "downfall": 0.3,
+  "has_precipitation": true,
   "effects": {
-    "sky_color": 7254527,
+    "sky_color": 8233727,
     "fog_color": 12638463,
     "water_color": 4159204,
     "water_fog_color": 329011,
-    "grass_color": 9470285,
-    "foliage_color": 10387789,
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000,
@@ -22,15 +14,41 @@
       "offset": 2
     }
   },
-  "starts": [],
-  "spawners": {},
+  "spawners": {
+    "ambient": [
+
+    ],
+    "axolotls": [],
+    "creature": [
+
+    ],
+    "misc": [],
+    "monster": [
+
+    ],
+    "underground_water_creature": [
+
+    ],
+    "water_ambient": [],
+    "water_creature": []
+  },
   "spawn_costs": {},
-  "carvers": {},
+  "carvers": {
+    "air": [
+
+    ]
+  },
   "features": [
     [],
-    [],
-    ["minecraft:amethyst_geode"],
-    [],
+    [
+
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+
+    ],
     [],
     [],
     [
@@ -61,11 +79,20 @@
       "minecraft:underwater_magma",
       "minecraft:disk_sand",
       "minecraft:disk_clay",
-      "minecraft:disk_gravel"
+      "minecraft:disk_gravel",
+      "minecraft:ore_emerald"
     ],
-    [],
-    [],
-    ["minecraft:glow_lichen"],
-    ["minecraft:freeze_top_layer"]
+    [
+
+    ],
+    [
+
+    ],
+    [
+
+    ],
+    [
+
+    ]
   ]
 }

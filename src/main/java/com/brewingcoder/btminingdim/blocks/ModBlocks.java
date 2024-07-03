@@ -11,7 +11,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.function.Supplier;
 
@@ -30,7 +29,7 @@ public class ModBlocks {
         return ModItems.ITEMS.register(name,()->new BlockItem(block.get(),new Item.Properties()));
     }
 
-    private static final BlockBehaviour.Properties defaultProps = BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1f,10f).requiresCorrectToolForDrops();
+    private static final BlockBehaviour.Properties defaultProps = BlockBehaviour.Properties.of().sound(SoundType.STONE);
 
-    public static final RegistryObject<Block> MINING_PORTAL = registerBlock("mining_portal",()->new MiningPortalBlock(defaultProps));
+    public static final RegistryObject<Block> MINING_PORTAL = registerBlock("mining_portal",()->new MiningPortalBlock(defaultProps.destroyTime(1f)));
 }
