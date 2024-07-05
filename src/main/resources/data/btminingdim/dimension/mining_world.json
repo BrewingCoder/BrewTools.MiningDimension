@@ -1,0 +1,26 @@
+{
+  "type": "btminingdim:mining_world",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:windswept_hills",
+      "lakes": false,
+      "features": true,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 2
+        },
+        {
+          "block": "minecraft:deepslate",
+          "height": 64
+        },
+        {
+          "block": "minecraft:stone",
+          "height": 64
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}
