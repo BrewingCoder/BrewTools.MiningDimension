@@ -15,7 +15,7 @@
     "SSS"
   ],
   "result" : {
-    "id" : "btminingdim:mining_portal",
+    "item" : "btminingdim:mining_portal",
     "count" : 1
   }
 }

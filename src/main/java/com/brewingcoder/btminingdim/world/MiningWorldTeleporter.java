@@ -13,11 +13,9 @@ import java.util.function.Function;
 
 public class MiningWorldTeleporter implements ITeleporter {
     private final BlockPos pos;
-    private final ServerLevel destination;
 
-    public MiningWorldTeleporter(ServerLevel dest, BlockPos pos){
+    public MiningWorldTeleporter(BlockPos pos){
         this.pos=pos;
-        this.destination = dest;
     }
 
     @Override
@@ -72,5 +70,6 @@ public class MiningWorldTeleporter implements ITeleporter {
         }
         return null;
     }
+
 
 }
