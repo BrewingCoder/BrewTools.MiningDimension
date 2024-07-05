@@ -1,20 +1,21 @@
 {
   "type" : "minecraft:crafting_shaped",
-  "pattern": [
-    "sss",
-    "sds",
-    "sss"
-  ],
+  "category" : "misc",
   "key" : {
-    "s" : {
+    "S" : {
       "item" : "minecraft:cobblestone"
     },
-    "d" : {
+    "D" : {
       "item": "minecraft:stone_pickaxe"
     }
   },
+  "pattern": [
+    "SSS",
+    "SDS",
+    "SSS"
+  ],
   "result" : {
-    "item" : "btminingdim:mining_portal",
+    "id" : "btminingdim:mining_portal",
     "count" : 1
   }
 }

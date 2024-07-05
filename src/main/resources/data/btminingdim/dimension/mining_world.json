@@ -1,12 +1,7 @@
 {
   "type": "btminingdim:mining_world",
   "generator": {
-    "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "minecraft:windswept_hills"
-    },
     "type": "minecraft:flat",
-    "seed": 0,
     "settings": {
       "biome": "minecraft:windswept_hills",
       "lakes": false,
@@ -18,11 +13,11 @@
         },
         {
           "block": "minecraft:deepslate",
-          "height": 62
+          "height": 64
         },
         {
           "block": "minecraft:stone",
-          "height": 62
+          "height": 64
         }
       ],
       "structure_overrides": []
