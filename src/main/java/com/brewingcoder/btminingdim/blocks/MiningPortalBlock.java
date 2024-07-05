@@ -35,7 +35,7 @@ public class MiningPortalBlock extends Block {
         MinecraftServer server = player.getServer();
         if (server == null) return;
 
-        if(player.level().dimension().equals(BTMiningDim.MINING_WORLD)){
+        if(player.level.dimension().equals(BTMiningDim.MINING_WORLD)){
             player.changeDimension(server.overworld(),new MiningWorldTeleporter(pos));
         }else{
             ServerLevel miningWorld = player.server.getLevel(BTMiningDim.MINING_WORLD);

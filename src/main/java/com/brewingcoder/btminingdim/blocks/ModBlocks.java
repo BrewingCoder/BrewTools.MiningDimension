@@ -1,12 +1,14 @@
 package com.brewingcoder.btminingdim.blocks;
 
 import com.brewingcoder.btminingdim.BTMiningDim;
+import com.brewingcoder.btminingdim.items.ModCreativeModeTab;
 import com.brewingcoder.btminingdim.items.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -26,10 +28,10 @@ public class ModBlocks {
         return toReturn;
     }
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){
-        return ModItems.ITEMS.register(name,()->new BlockItem(block.get(),new Item.Properties()));
+        return ModItems.ITEMS.register(name,()->new BlockItem(block.get(),new Item.Properties().tab(ModCreativeModeTab.MAIN)));
     }
 
-    private static final BlockBehaviour.Properties defaultProps = BlockBehaviour.Properties.of().sound(SoundType.STONE);
+    private static final BlockBehaviour.Properties defaultProps = BlockBehaviour.Properties.of(Material.STONE);
 
     public static final RegistryObject<Block> MINING_PORTAL = registerBlock("mining_portal",()->new MiningPortalBlock(defaultProps.destroyTime(1f)));
 }
