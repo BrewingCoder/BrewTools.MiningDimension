@@ -2,70 +2,74 @@ package com.brewingcoder.btminingdim.blocks;
 
 import com.brewingcoder.btminingdim.BTMiningDim;
 import com.brewingcoder.btminingdim.world.MiningWorldTeleporter;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class MiningPortalBlock extends Block {
 
-    public MiningPortalBlock(Properties props){
+    public MiningPortalBlock(Properties props) {
         super(props);
     }
 
-
+    /**
+     * Right-click (no item, not sneaking) toggles between the overworld and
+     * the mining dimension. Server-only. Server picks (or builds) a portal in
+     * the destination chunk via [MiningWorldTeleporter] and teleports the
+     * player there using the 1.21.x [TeleportTransition] API.
+     */
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult){
-        if( !player.isCrouching()){
-            if(!level.isClientSide) {
-                if (level.dimension().equals(BTMiningDim.MINING_WORLD)){
-                     ServerLevel destination = level.getServer().getLevel(BTMiningDim.OVERWORLD);
-                     player.teleportTo(destination,pos.getX(),pos.getY(),pos.getZ(),)
-                    player.changeDimension(destination,new MiningWorldTeleporter(destination,pos));
-                    return InteractionResult.SUCCESS;
-                }
-                if (level.dimension().equals(BTMiningDim.OVERWORLD)){
-                    //ServerLevel destination = level.getServer().getLevel(BTMiningDim.MINING_WORLD);
-                    ResourceKey destination = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("btminingdim:mining_world"));
-                    ServerPlayer sp = (ServerPlayer)player;
-                    ServerLevel destLevel = sp.getServer().getLevel(BTMiningDim.MINING_WORLD);
-                    Iterable<ServerLevel> Levels = sp.getServer().getAllLevels();
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                            Player player, BlockHitResult hit) {
+        if (player.isCrouching() || level.isClientSide) return InteractionResult.PASS;
 
-                    player.changeDimension(destLevel, new MiningWorldTeleporter(destLevel,pos));
-                    return InteractionResult.SUCCESS;
-                }
-            }
-        }
-        return InteractionResult.PASS;
-    };
+        boolean inMining = level.dimension().equals(BTMiningDim.MINING_WORLD);
+        ServerLevel destLevel = level.getServer().getLevel(
+                inMining ? BTMiningDim.OVERWORLD : BTMiningDim.MINING_WORLD
+        );
+        if (destLevel == null) return InteractionResult.PASS;
 
+        Vec3 arrival = MiningWorldTeleporter.findOrPlaceArrival(destLevel, pos);
+        if (arrival == null) return InteractionResult.PASS;
+
+        // Preserve facing + zero-out velocity so the player doesn't fly off
+        // the new portal block on arrival. DO_NOTHING = no portal sound,
+        // no portal-cooldown ticket — feels like a doorway, not a vanilla portal.
+        DimensionTransition transition = new DimensionTransition(
+                destLevel, arrival, Vec3.ZERO,
+                player.getYRot(), player.getXRot(),
+                DimensionTransition.DO_NOTHING
+        );
+        player.changeDimension(transition);
+        return InteractionResult.SUCCESS;
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(@NotNull BlockState state, Level level, @NotNull BlockPos pos, RandomSource random) {
         random.nextFloat();
-        BlockState te = level.getBlockState(pos);
-        if (te.is(ModBlocks.MINING_PORTAL.get())){
-            level.addParticle(ParticleTypes.PORTAL, pos.getX() +  (random.nextDouble() - 0.5) * 1.5, pos.getY() + 2, pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 1.5, 0, 0, 0);
-            level.addParticle(ParticleTypes.ENCHANT, pos.getX() + (random.nextDouble() - 0.5) * 1.5, pos.getY() + 2, pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 1.5, 0, 0, 0);
+        BlockState here = level.getBlockState(pos);
+        if (here.is(ModBlocks.MINING_PORTAL.get())) {
+            level.addParticle(ParticleTypes.PORTAL,
+                    pos.getX() + (random.nextDouble() - 0.5) * 1.5,
+                    pos.getY() + 2,
+                    pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 1.5, 0, 0, 0);
+            level.addParticle(ParticleTypes.ENCHANT,
+                    pos.getX() + (random.nextDouble() - 0.5) * 1.5,
+                    pos.getY() + 2,
+                    pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 1.5, 0, 0, 0);
         }
     }
 }

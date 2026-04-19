@@ -7,29 +7,37 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class ModBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BTMiningDim.MODID);
+    public static final DeferredRegister.Blocks BLOCKS =
+            DeferredRegister.createBlocks(BTMiningDim.MODID);
 
     public static void register(IEventBus bus){
         BLOCKS.register(bus);
     }
-    private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block){
-        RegistryObject<T> toReturn = BLOCKS.register(name,block);
-        registerBlockItem(name,toReturn);
-        return toReturn;
-    }
-    private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){
-        return ModItems.ITEMS.register(name,()->new BlockItem(block.get(),new Item.Properties()));
-    }
 
-    private static final BlockBehaviour.Properties defaultProps = BlockBehaviour.Properties.of().sound(SoundType.STONE);
+    private static final BlockBehaviour.Properties defaultProps =
+            BlockBehaviour.Properties.of().sound(SoundType.STONE);
 
-    public static final RegistryObject<Block> MINING_PORTAL = registerBlock("mining_portal",()->new MiningPortalBlock(defaultProps.destroyTime(1f)));
+    public static final DeferredBlock<Block> MINING_PORTAL =
+            registerBlock("mining_portal", MiningPortalBlock::new, defaultProps.destroyTime(1f));
+
+    /**
+     * Register [block] under [name] AND a matching BlockItem so it appears in
+     * the creative tab + can be /given to players.
+     */
+    private static <T extends Block> DeferredBlock<T> registerBlock(
+            String name,
+            Function<BlockBehaviour.Properties, T> ctor,
+            BlockBehaviour.Properties props
+    ) {
+        DeferredBlock<T> block = BLOCKS.registerBlock(name, ctor, props);
+        ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        return block;
+    }
 }
